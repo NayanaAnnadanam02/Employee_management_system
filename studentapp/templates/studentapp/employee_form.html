@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #1e3a5f;
+            color: white;
+            padding: 22px 6%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #0000000d;
+        }
+
+        h1 {
+            color: #1e3a5f;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px #2563eb20;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        .submit-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back-btn {
+            color: #2563eb;
+            background: #eff6ff;
+            margin-left: 8px;
+        }
+
+        .errorlist {
+            color: #dc2626;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            background: #1e3a5f;
+            color: white;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 25px;
+                padding: 0 12px;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>Employee Management System</header>
+
+<div class="container">
+    <div class="form-card">
+
+        <h1>Add Employee</h1>
+        <p class="subtitle">
+            Enter the employee details below.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn submit-btn">
+                Save Employee
+            </button>
+
+            <a href="{% url 'employee_list' %}" class="btn back-btn">
+                Back to List
+            </a>
+        </form>
+
+    </div>
+</div>
+
+<footer>
+    Employee Management System | Built with Django
+</footer>
+
+</body>
+</html>
+

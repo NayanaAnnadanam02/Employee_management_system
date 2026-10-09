@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management Dashboard</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fc;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172b4d;
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .header-link {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #64748b;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #172b4d;
+            font-size: 29px;
+        }
+
+        .muted { color: #64748b; }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 17px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover { background: #1d4ed8; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 13px;
+            box-shadow: 0 4px 15px #172b4d0a;
+            border: 1px solid #e7edf5;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .stat-number {
+            margin-top: 12px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #172b4d;
+        }
+
+        .table-card {
+            background: white;
+            padding: 22px;
+            border-radius: 13px;
+            box-shadow: 0 4px 15px #172b4d0a;
+            border: 1px solid #e7edf5;
+        }
+
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 300px;
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search:focus {
+            outline: 2px solid #bfdbfe;
+            border-color: #2563eb;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #475569;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        th, td {
+            padding: 16px 13px;
+            border-bottom: 1px solid #e8edf4;
+        }
+
+        td { font-size: 14px; }
+
+        tbody tr:hover { background: #f8faff; }
+
+        .department {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #eaf1ff;
+            color: #2453a6;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 30px;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            padding: 25px 15px;
+        }
+
+        @media (max-width: 600px) {
+            main { margin-top: 24px; padding: 0 12px; }
+            h1 { font-size: 25px; }
+            .table-card { padding: 14px; }
+            .search { max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+  
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="header-link">Logout</button>
+</form>
+
+<a href="{% url 'reports' %}" class="header-link">Reports</a>
+
+
+
+
+</header>
+
+<main>
+    <section class="welcome">
+        <div>
+            <h1>Employee Dashboard</h1>
+            <div class="muted">
+                Manage your team and employee information.
+            </div>
+        </div>
+
+        <a href="{% url 'employee_add' %}" class="button primary">
+            + Add Employee
+        </a>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-number" id="employeeCount">
+                {{ employees|length }}
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Directory Status</div>
+            <div class="stat-number" style="font-size:21px">
+                Active
+            </div>
+        </div>
+    </section>
+
+    <section class="table-card">
+        <div class="table-heading">
+            <h2>Employee Directory</h2>
+            <input
+                id="employeeSearch"
+                class="search"
+                type="search"
+                placeholder="Search name or department..."
+                aria-label="Search employees"
+            >
+        </div>
+
+        <div class="table-wrap">
+            <table id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Department</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.age }}</td>
+                        <td>
+                            <span class="department">
+                                {{ employee.department }}
+                            </span>
+                        </td>
+                        <td>₹ {{ employee.salary }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty">
+                            No employees found. Click Add Employee
+                            to create your first record.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <p id="noResults" class="empty" hidden>
+            No matching employees found.
+        </p>
+    </section>
+</main>
+
+<footer>
+    Employee Management System · Built with Django
+</footer>
+
+<script>
+    const searchInput = document.getElementById('employeeSearch');
+    const tableBody = document.querySelector('#employeeTable tbody');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const rows = tableBody.querySelectorAll('tr');
+        let visibleCount = 0;
+
+        rows.forEach(function (row) {
+            if (row.querySelector('.empty')) {
+                row.hidden = query.length > 0;
+                return;
+            }
+
+            const name = row.cells[0].textContent.toLowerCase();
+            const department = row.cells[3].textContent.toLowerCase();
+            const matches = name.includes(query) ||
+                            department.includes(query);
+
+            row.hidden = !matches;
+
+            if (matches) visibleCount++;
+        });
+
+        noResults.hidden = query.length === 0 || visibleCount > 0;
+    });
+</script>
+
+</body>
+</html>
+
+
+<div style="width: 100%; max-width: 450px; height: 180px; margin: 0 auto;">
+    <canvas id="departmentChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ department_labels|json_script:"department-labels" }}
+{{ department_counts|json_script:"department-counts" }}
+
+<script>
+    const labels = JSON.parse(
+        document.getElementById('department-labels').textContent
+    );
+
+    const counts = JSON.parse(
+        document.getElementById('department-counts').textContent
+    );
+
+    new Chart(document.getElementById('departmentChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Number of Employees',
+                data: counts,
+                backgroundColor: '#2bb5b0',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+    }
+}
+        }
+    );
+</script>
